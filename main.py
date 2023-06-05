@@ -44,8 +44,10 @@ def get_users(inputid):
       }
       users_array.append(user_dict)
 
-  return users_array
-  
+  return users_array # 1D array
+# mode.predict([users_array]) # 2D array
+
+
 model = tf.keras.models.load_model('./pleasework')
 df_enrollments = pd.read_csv('Dataset_Recommendation_System_-_Enrollment_Dataset_enroll_only.csv',  dtype={'user_id': 'str', 'task_id':'str'})
 
