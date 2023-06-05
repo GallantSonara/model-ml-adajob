@@ -1,6 +1,7 @@
 import uvicorn
 from enum import Enum
 from pydantic import BaseModel
+import mysql.connector
 from fastapi import FastAPI, HTTPException, Path, Query
 import tensorflow as tf
 import numpy as np
@@ -9,11 +10,42 @@ import os
 
 app = FastAPI()  # create a new FastAPI app instance
 
-# Define a Pydantic model for an item
-class Item(BaseModel):
-    userID: int
 
+mysql_config = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'your_password',
+    'database': 'your_database'
+}
 
+def get_users(inputid):
+  # Establish a connection to the MySQL server
+  conn = mysql.connector.connect(**mysql_config)
+  cursor = conn.cursor()
+
+  # Execute the query to retrieve all users
+  query = "SELECT 'is_employed', 'task_id', 'task_title' FROM users WHERE id = " + inputid + "'";
+  cursor.execute(query)
+
+  # Fetch all the user records
+  users = cursor.fetchall()
+
+  # Close the cursor and connection
+  cursor.close()
+  conn.close()
+
+  # Convert the result to an array variable
+  users_array = []
+  for data in users:
+      user_dict = {
+          'is_employed': data[0],
+          'task_id': data[1],
+          'task_title': data[2]
+      }
+      users_array.append(user_dict)
+
+  return users_array
+  
 model = tf.keras.models.load_model('./pleasework')
 df_enrollments = pd.read_csv('Dataset_Recommendation_System_-_Enrollment_Dataset_enroll_only.csv',  dtype={'user_id': 'str', 'task_id':'str'})
 
@@ -39,6 +71,10 @@ def delete_enrolled_tasks(userid, titles):
 def hello_world():
     return ("hello world")
 
+
+# Define a Pydantic model for an item
+class Item(BaseModel):
+    userID: int
 
 @app.post("/")
 def add_item(item: Item):
