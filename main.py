@@ -12,10 +12,10 @@ app = FastAPI()  # create a new FastAPI app instance
 
 
 mysql_config = {
-    'host': 'localhost',
+    'host': '34.101.131.51',
     'user': 'root',
-    'password': 'your_password',
-    'database': 'your_database'
+    'password': '123asd',
+    'database': 'auth_db'
 }
 
 def get_users(inputid):
@@ -24,7 +24,7 @@ def get_users(inputid):
   cursor = conn.cursor()
 
   # Execute the query to retrieve all users
-  query = "SELECT 'is_employed', 'task_id', 'task_title' FROM users WHERE id = " + inputid + "'";
+  query = "SELECT 'id', 'task_id', 'task_title' FROM users WHERE id = " + inputid + "'";
   cursor.execute(query)
 
   # Fetch all the user records
@@ -38,7 +38,7 @@ def get_users(inputid):
   users_array = []
   for data in users:
       user_dict = {
-          'is_employed': data[0],
+          'id': data[0],
           'task_id': data[1],
           'task_title': data[2]
       }
