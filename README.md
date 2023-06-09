@@ -1,12 +1,14 @@
 # jobrecommender
 
 Input
+```
 {
   "userID": 0
 }
+```
 
 Respond
-
+```
 [
   "BNB Doge",
   "Catly.io",
@@ -19,3 +21,4 @@ Respond
   "Social Good",
   "Upbit"
 ]
+```
